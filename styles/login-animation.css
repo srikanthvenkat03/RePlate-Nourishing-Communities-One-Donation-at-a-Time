@@ -1,0 +1,144 @@
+/* Fade out animation for collapsing original sections */
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+/* New container for the login form; centers content in the right container */
+.login-form-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Styling for the login form box */
+.login-form {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 80%;
+  height: 600px;
+  max-width: 500px;
+  text-align: center;
+  padding-top: 100px;
+  /* Removed extra padding-top so that the form is perfectly centered */
+}
+
+.login-form-header{
+  margin-top: 10px;
+  left: 30px;
+  margin-right: 90px;
+  margin-bottom:30px;
+}
+
+.login-form-subheader{
+  margin-top:-40px;
+  margin-right: 90px;
+  margin-bottom: 30px;
+}
+
+/* Form group for label and input: Centered alignment */
+.form-group {
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 20px;
+}
+
+/* Input field styling */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Final login button styling */
+.button-login-final {
+  background-color: #F57828;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Hover effect for the login button */
+.button-login-final:hover {
+  background-color: #e0661f;
+}
+
+/* Back button styling with animation */
+@keyframes backButtonFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #333;
+  animation: backButtonFadeIn 0.5s ease forwards;
+  animation-delay: 0.0s;
+}
+
+/* Hover effect for back button */
+.back-button:hover {
+  color: #F57828;
+}
+
+/* Keyframes for a fade-in upward animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply animation to email/username field */
+.animate-email {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease forwards;
+  animation-delay: 0.2s;
+}
+
+/* Apply animation to password field */
+.animate-password {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease forwards;
+  animation-delay: 0.6s;
+}
+
+/* Apply animation to the login button */
+.animate-button {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease forwards;
+  animation-delay: 0.8s;
+}

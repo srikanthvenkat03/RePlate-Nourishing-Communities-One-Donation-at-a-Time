@@ -1,0 +1,37 @@
+Problem Statement:
+
+To create a non-profit app named "Replate" that reduces food waste by allowing restaurants to communicate about excess fresh food to the government. The government can transfer the food to a common foodshelter allowing those in need to access the food.
+
+To create a efficient system that allows restaurants to communicate with government agencies to redirect surplus food to community centres.
+
+Design:
+
+Restaurant Owner:
+
+Constraints:
+Minimum food quantity limit
+quality yet to be decided
+Last Report Time
+
+- Login
+- Report
+
+
+
+Government:
+
+Constraints:
+
+Need to collect food no matter what from all restaurants.
+Set Time Limit to report For restaurants.
+
+ - Report Dashboard
+ - Restaurant DashBoard (Rating from Gov Side, Amount Donated, Address
+ - Waste Monitoring(Maybe)
+
+
+Notes:
+
+Random Inspection from government side
+
+
