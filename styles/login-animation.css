@@ -31,15 +31,15 @@
   /* Removed extra padding-top so that the form is perfectly centered */
 }
 
-.login-form-header{
+.login-form-header {
   margin-top: 10px;
   left: 30px;
   margin-right: 90px;
-  margin-bottom:30px;
+  margin-bottom: 30px;
 }
 
-.login-form-subheader{
-  margin-top:-40px;
+.login-form-subheader {
+  margin-top: -40px;
   margin-right: 90px;
   margin-bottom: 30px;
 }
@@ -122,25 +122,41 @@ input[type="password"] {
   }
 }
 
-/* Apply animation to email/username field */
-.animate-email {
+/* Animation for the signup form fields */
+
+/* Animate User Name */
+.animate-username {
   opacity: 0;
   animation: fadeInUp 0.5s ease forwards;
   animation-delay: 0.2s;
 }
 
-/* Apply animation to password field */
-.animate-password {
+/* Animate Restaurant Name */
+.animate-restaurant {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease forwards;
+  animation-delay: 0.4s;
+}
+
+/* Animate Email/Phone (reuse .animate-email for both forms) */
+.animate-email {
   opacity: 0;
   animation: fadeInUp 0.5s ease forwards;
   animation-delay: 0.6s;
 }
 
-/* Apply animation to the login button */
-.animate-button {
+/* Animate Password */
+.animate-password {
   opacity: 0;
   animation: fadeInUp 0.5s ease forwards;
   animation-delay: 0.8s;
+}
+
+/* Animate Button (used for both login and signup buttons) */
+.animate-button {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease forwards;
+  animation-delay: 1.0s;
 }
 
 /* New container for the signup form; centers content in the right container */
@@ -165,7 +181,7 @@ input[type="password"] {
   width: 80%;
   max-width: 500px;
   text-align: center;
-  height: 550px;
+  height: 625px;
 }
 
 .signup-form-header {
@@ -173,14 +189,8 @@ input[type="password"] {
   margin-bottom: 30px;
 }
 
-/* Animation for the restaurant name field */
-.animate-restaurant {
-  opacity: 0;
-  animation: fadeInUp 0.5s ease forwards;
-  animation-delay: 0.2s;
-}
-
-.button-signup-final{
+/* Final signup button styling */
+.button-signup-final {
   background-color: #F57828;
   border: none;
   padding: 10px;
@@ -190,4 +200,7 @@ input[type="password"] {
   cursor: pointer;
 }
 
-/* (Reuse existing animations for email, password, and button) */
+/* Hover effect for the signup button */
+.button-signup-final:hover {
+  background-color: #e0661f;
+}

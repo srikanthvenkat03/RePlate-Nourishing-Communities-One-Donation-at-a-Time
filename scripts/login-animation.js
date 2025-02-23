@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function showLoginForm(clickedButton) {
-  // ... [existing login code remains unchanged] ...
   const rightContainer = document.querySelector('.right');
   const topContainer = rightContainer.querySelector('.top');
   const bottomContainer = rightContainer.querySelector('.bottom');
@@ -102,13 +101,17 @@ function showSignupForm(clickedButton) {
       <button class="back-button" id="back-btn">Back</button>
       <div class="signup-form">
         <h2 class="signup-form-header">Join Us !</h2>
+        <div class="form-group animate-username">
+          <label for="user-name">User Name:</label>
+          <input type="text" id="user-name" name="user-name" placeholder="Enter your user name">
+        </div>
         <div class="form-group animate-restaurant">
           <label for="restaurant-name">Restaurant Name:</label>
           <input type="text" id="restaurant-name" name="restaurant-name" placeholder="Enter your restaurant name">
         </div>
         <div class="form-group animate-email">
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" placeholder="Enter your email">
+          <label for="email">Email or Phone:</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email or phone">
         </div>
         <div class="form-group animate-password">
           <label for="password">Password:</label>
@@ -122,10 +125,11 @@ function showSignupForm(clickedButton) {
     // Signup button logic
     const signupFinalBtn = document.getElementById('signup-final-btn');
     signupFinalBtn.addEventListener('click', function() {
+      const userName = document.getElementById('user-name').value;
       const restaurantName = document.getElementById('restaurant-name').value;
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      console.log('Signing up with', restaurantName, email, password);
+      console.log('Signing up with', userName, restaurantName, email, password);
       // Further signup processing logic…
     });
 
