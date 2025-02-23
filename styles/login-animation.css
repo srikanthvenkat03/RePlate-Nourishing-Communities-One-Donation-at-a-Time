@@ -73,6 +73,7 @@ input[type="password"] {
   color: #fff;
   border-radius: 4px;
   cursor: pointer;
+  margin-top:15px;
 }
 
 /* Hover effect for the login button */
