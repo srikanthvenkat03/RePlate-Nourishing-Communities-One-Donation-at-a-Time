@@ -142,3 +142,52 @@ input[type="password"] {
   animation: fadeInUp 0.5s ease forwards;
   animation-delay: 0.8s;
 }
+
+/* New container for the signup form; centers content in the right container */
+.signup-form-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Styling for the signup form box */
+.signup-form {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+  height: 550px;
+}
+
+.signup-form-header {
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+/* Animation for the restaurant name field */
+.animate-restaurant {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease forwards;
+  animation-delay: 0.2s;
+}
+
+.button-signup-final{
+  background-color: #F57828;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* (Reuse existing animations for email, password, and button) */
