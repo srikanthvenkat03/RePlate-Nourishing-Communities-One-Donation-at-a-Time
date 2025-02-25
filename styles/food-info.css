@@ -1,0 +1,226 @@
+/* General Styling */
+body {
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f8f8;
+}
+
+/* Header Section */
+.header-container {
+  background-color: #f57a28;
+  width: 100%;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 80px;
+  height: 80px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 50px;
+  color: white;
+  font-family: "Lato", serif;
+  font-weight: 700;
+}
+
+.hamburger {
+  position: absolute;
+  right: 80px;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.hamburger:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Top Bar with Search and Sort Button */
+.top-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+
+.search-bar {
+  width: 60%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  background-color: white;
+  text-indent: 20px;
+}
+
+/* Sort By Button (with icon image) */
+.sort-by-btn {
+  margin-left: 10px;
+  background-color: white;
+  border-color  : #f57a28;
+  border-width: 1px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+}
+
+.sort-by-btn:hover {
+  background-color: #e06f1f;
+}
+
+.sort-by-btn img.sort-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+/* Food List Container */
+#food-list {
+  width: 80%;
+  margin: 20px auto;
+}
+
+/* Header Row for Food List */
+.food-header {
+  display: grid;
+  grid-template-columns: 23% 27% 15% 15% 20%;
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+  padding: 10px;
+  background: #eeeded;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.food-header div {
+  padding: 5px;
+}
+
+.food-header div:nth-child(2){
+  text-align: left;
+}
+
+.food-header div:nth-child(6){
+  margin-left: 7px;
+}
+
+/* Food Item Container */
+.food-item {
+  background: white;
+  margin-bottom: 10px;
+  padding: 15px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* Grid Layout for Each Food Item */
+.food-content {
+  display: grid;
+  grid-template-columns: 23% 27% 15% 15% 10% 10%;
+  align-items: center;
+}
+
+.food-content div:nth-child(2){
+  text-align: left;
+}
+
+/* Text Alignments */
+.restaurant-name,
+.food-name,
+.weight,
+.distance {
+  text-align: center;
+}
+
+/* Rating System */
+.rating {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.rating span {
+  font-size: 24px;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.rating span.filled-star {
+  color: rgb(255, 187, 0);
+}
+
+.side-tick{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Tick and Close Buttons (now with images inside) */
+.side-tick button,
+.close-btn button {
+  background-color: transparent; /* so the icon is more visible */
+  border: none;
+  cursor: pointer;
+  padding: 0; /* remove extra space around the icon */
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+.side-tick button:hover,
+.close-btn button:hover {
+  transform: scale(1.1);
+}
+
+/* Ensure the icons fit nicely */
+
+.close-btn button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding-right: 50px;
+}
+
+.side-tick button img{
+  padding-top: 4.5px;
+  padding-left: 50px;
+  height: 60px;
+  width: 60px;
+}

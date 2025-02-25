@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Dashboard</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="../styles/food-info.css">
+  <link rel="icon" type="image/png" href="../images/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header Section with Logo and Title -->
+  <div class="header-container">
+    <div class="header-content">
+      <img src="../images/logo.png" alt="Logo" class="logo">
+      <h1>Food Dashboard</h1>
+    </div>
+    <div class="hamburger">&#9776;</div>
+  </div>
+
+  <!-- Top Bar with Search and Sort By Button -->
+  <div class="top-bar">
+    <input type="text" id="search" placeholder="Search" class="search-bar">
+    <!-- Sort By button replaced with an image icon -->
+    <button class="sort-by-btn">
+      <img src="../images/sort_by-removebg-preview.png" alt="Sort By" class="sort-icon">
+    </button>
+  </div>
+
+  <!-- Food List -->
+  <div id="food-list">
+    <!-- Header Row -->
+    <div class="food-header">
+      <div>Restaurant Name</div>
+      <div>Food Name</div>
+      <div>Donation Amount</div>
+      <div>Distance</div>
+      <div>Accept</div>
+    </div>
+    <!-- Food items will be dynamically added here -->
+  </div>
+
+  <script src="../scripts/food-info.js"></script>
+</body>
+</html>
