@@ -1,6 +1,6 @@
 $(document).ready(function () {
     let orderHistory = [
-        { orderId: "403-3501747-4070742", date: "17 January 2025", foodName: "Vegetable Biryani", amountDonated: "10 kg" },
+        { orderId: "403-3501747-4070742", date: "17 January 2025", foodName: "Vegetable Biryani, Poori, Dosa, Chapathi, Idli, Samosa, Idiyappam ", amountDonated: "10 kg" },
         { orderId: "403-3501747-4070743", date: "18 January 2025", foodName: "Chapati", amountDonated: "15 kg" },
         { orderId: "403-3501747-4070744", date: "19 January 2025", foodName: "Paneer Butter Masala", amountDonated: "5 kg" }
     ];
