@@ -50,4 +50,29 @@ $(document).ready(function () {
   }
 
   loadFoods();
+
+  // Dropdown toggle functionality
+
+  // Toggle sort dropdown on sort-by button click
+  $('.sort-by-btn').click(function(e) {
+    e.stopPropagation();  // Prevent event bubbling
+    $('.sort-dropdown').slideToggle(300);
+  });
+  
+  // Toggle hamburger dropdown on hamburger button click
+  $('.hamburger').click(function(e) {
+    e.stopPropagation();
+    $('.hamburger-dropdown').slideToggle(300);
+  });
+
+  // Prevent clicks within dropdown from closing it
+  $('.sort-dropdown, .hamburger-dropdown').click(function(e) {
+    e.stopPropagation();
+  });
+
+  // Hide dropdowns when clicking outside
+  $(document).click(function() {
+    $('.sort-dropdown').slideUp(300);
+    $('.hamburger-dropdown').slideUp(300);
+  });
 });

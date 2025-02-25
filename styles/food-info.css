@@ -80,7 +80,7 @@ h1 {
 .sort-by-btn {
   margin-left: 10px;
   background-color: white;
-  border-color  : #f57a28;
+  border-color: #f57a28;
   border-width: 1px;
   border-radius: 50px;
   cursor: pointer;
@@ -123,11 +123,11 @@ h1 {
   padding: 5px;
 }
 
-.food-header div:nth-child(2){
+.food-header div:nth-child(2) {
   text-align: left;
 }
 
-.food-header div:nth-child(6){
+.food-header div:nth-child(6) {
   margin-left: 7px;
 }
 
@@ -147,7 +147,7 @@ h1 {
   align-items: center;
 }
 
-.food-content div:nth-child(2){
+.food-content div:nth-child(2) {
   text-align: left;
 }
 
@@ -178,17 +178,18 @@ h1 {
   color: rgb(255, 187, 0);
 }
 
-.side-tick{
+.side-tick {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.close-btn{
+.close-btn {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 /* Tick and Close Buttons (now with images inside) */
 .side-tick button,
 .close-btn button {
@@ -210,7 +211,6 @@ h1 {
 }
 
 /* Ensure the icons fit nicely */
-
 .close-btn button img {
   width: 100%;
   height: 100%;
@@ -218,9 +218,49 @@ h1 {
   padding-right: 50px;
 }
 
-.side-tick button img{
+.side-tick button img {
   padding-top: 4.5px;
   padding-left: 50px;
   height: 60px;
   width: 60px;
+}
+
+/* Dropdown Styling for Hamburger and Sort By */
+.hamburger-dropdown, .sort-dropdown {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.hamburger-dropdown {
+  top: 70px; /* Adjust as needed */
+  right: 80px;
+  width: 220px;
+}
+
+.sort-dropdown {
+  top: 168px;  /* Adjust so it appears below the sort-by button */
+  right: 200px;
+  width: 200px;
+}
+
+.dropdown-option {
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.dropdown-option:last-child {
+  border-bottom: none;
+}
+
+.dropdown-option:hover {
+  background-color: #e4e0e0;
+  color: black;
 }
