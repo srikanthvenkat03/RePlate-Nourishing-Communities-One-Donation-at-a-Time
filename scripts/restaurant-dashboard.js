@@ -17,6 +17,22 @@ $(document).ready(function () {
     }
   ];
 
+  // Prevent clicks on the search input from closing the dropdown
+$("#food-search").click(function(e) {
+  e.stopPropagation();
+});
+
+// Also prevent Enter keypress from propagating and triggering a collapse
+$("#food-search").keypress(function(e) {
+  if (e.which === 13) {
+    e.preventDefault(); // Prevent form submission if it's inside a form
+    e.stopPropagation();
+    // Optionally ensure the dropdown remains visible
+    $("#dropdown-menu").slideDown(400);
+  }
+});
+
+
   // Sample previous orders array (JS object for previous orders)
   let previousOrders = [
     { food: "Idli, Dosa", amount: "2 kg", date: "2023-05-12, 10:15 AM" },

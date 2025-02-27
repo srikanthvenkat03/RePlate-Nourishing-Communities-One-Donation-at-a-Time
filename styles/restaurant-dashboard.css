@@ -151,10 +151,15 @@ h1 {
   text-align: center;
 }
 
-.order-form div:nth-child(3){
-  margin-left: 180px;
-}
+.submit-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 0px;
+} 
 
+.order-header div:nth-child(3){
+  margin-left: 15px;
+}
 /* Donate Food Dropdown Column */
 .donate-section {
   text-align: center;
@@ -163,17 +168,19 @@ h1 {
   background-color: #fff;
   border: 2px solid #ccc;
   color: black;
-  padding: 8px 12px;
+  padding: 10px 14px;
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
+  font-family: "Lato", serif;
+  font-weight: 400;
   transition: background-color 0.3s ease;
-  
+  margin-top: 10px;
 
 }
 .donate-section .dropdown-btn:hover {
-  background-color: #f57a28;
-  color: #fff;
+  background-color: #d4d4d4;
+  color: black  ;
 }
 .dropdown-menu {
   background-color: #fff;
@@ -204,8 +211,8 @@ h1 {
   transition: background-color 0.3s ease;
 }
 #food-list li:hover {
-  background-color: #f57a28;
-  color: white;
+  background-color: #ccc;
+  color: black;
 }
 
 /* Selected Foods (with remove option) */
@@ -217,8 +224,8 @@ h1 {
   justify-content: flex-start;
 }
 .selected-food {
-  background-color: #f57a28;
-  color: white;
+  background-color: #ccc;
+  color: black;
   padding: 5px 10px;
   border-radius: 15px;
   font-size: 14px;
@@ -236,10 +243,13 @@ h1 {
   text-align: left;
 }
 #amount-input {
-  width: 90%;
-  padding: 8px;
-  border: 2px solid #f57a28;
+  width: 60%;
+  padding: 10px 20px;
+  border: 2px solid #ccc;
   border-radius: 5px;
+  margin-left: 60px;
+  font-size: 14px;
+  margin-top: 2px;
 }
 
 /* Submit Section */
@@ -247,16 +257,19 @@ h1 {
   text-align: left;
 }
 .submit-btn {
-  background-color: #f57a28;
-  color: white;
-  border: none;
+  background-color: white;
+  color: black;
+  font-family: "Lato", serif;
+  font-weight: 400;
+  border: 2px solid #ccc;
+  font-size: 16px;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 .submit-btn:hover {
-  background-color: #e64e00;
+  background-color: #ccc;
 }
 
 .previous-orders-btn{
