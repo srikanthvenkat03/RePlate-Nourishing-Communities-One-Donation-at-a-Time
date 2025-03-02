@@ -1,0 +1,4 @@
+theme
+notification icon 
+settings icon
+Replate Logo

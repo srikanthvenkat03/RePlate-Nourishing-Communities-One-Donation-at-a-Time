@@ -110,8 +110,11 @@ function showSignupForm(clickedButton) {
           <input type="text" id="restaurant-name" name="restaurant-name" placeholder="Enter your restaurant name">
         </div>
         <div class="form-group animate-email">
-          <label for="email">Email or Phone:</label>
+          <label for="email">Email:</label>
           <input type="email" id="email" name="email" placeholder="Enter your email or phone">
+        <div class="form-group animate-phone">
+          <label for="phone">Phone:</label>
+          <input type="text" id="phone" name="phone" placeholder="Enter your phone">
         </div>
         <div class="form-group animate-password">
           <label for="password">Password:</label>
