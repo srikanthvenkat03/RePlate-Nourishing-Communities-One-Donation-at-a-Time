@@ -30,23 +30,3 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-const { Pool } = require('pg');
-
-const pool = new Pool({
-  host: 'localhost',
-  user: 'postgres',
-  password: '',
-  database: 'Re-Plate',
-  port: 5432
-});
-
-// Example route to get all foods from the 'foods' table
-app.get('/api/foods', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM foods;');
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
