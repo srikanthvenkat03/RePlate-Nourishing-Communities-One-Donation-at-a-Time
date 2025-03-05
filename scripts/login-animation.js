@@ -70,10 +70,10 @@ function showLoginForm(clickedButton) {
       if (container) {
         container.classList.add('fade-out');
         setTimeout(function() {
-          window.location.href = "login.html";
+          window.location.href = "index.html";
         }, 200);
       } else {
-        window.location.href = "login.html";
+        window.location.href = "index.html";
       }
     });
   }, 200);
@@ -143,10 +143,10 @@ function showSignupForm(clickedButton) {
       if (container) {
         container.classList.add('fade-out');
         setTimeout(function() {
-          window.location.href = "login.html";
+          window.location.href = "index.html";
         }, 200);
       } else {
-        window.location.href = "login.html";
+        window.location.href = "index.html";
       }
     });
   }, 200);
