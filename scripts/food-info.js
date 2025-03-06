@@ -43,9 +43,9 @@ $(document).ready(async function () {
   }
 
   // 3) Accept/Reject Logic (Event Delegation)
-  // Because rows are created dynamically, we use .on('click', ...)
   $("#food-list").on('click', '.accept-btn', async function() {
-    const orderId = $(this).closest('.food-item').data('order-id');
+    const $foodItem = $(this).closest('.food-item');
+    const orderId = $foodItem.data('order-id');
     try {
       const response = await fetch(`/api/orders/${orderId}`, {
         method: 'PUT',
@@ -55,7 +55,11 @@ $(document).ready(async function () {
       const data = await response.json();
       if (response.ok) {
         alert(`Order #${orderId} accepted!`);
-        loadOrders(); // Reload the list
+        // Add class to trigger removal animation
+        $foodItem.addClass('removing');
+        $foodItem.on('transitionend', function() {
+          $(this).remove();
+        });
       } else {
         alert(data.error || 'Update failed');
       }
@@ -65,7 +69,8 @@ $(document).ready(async function () {
   });
 
   $("#food-list").on('click', '.reject-btn', async function() {
-    const orderId = $(this).closest('.food-item').data('order-id');
+    const $foodItem = $(this).closest('.food-item');
+    const orderId = $foodItem.data('order-id');
     try {
       const response = await fetch(`/api/orders/${orderId}`, {
         method: 'PUT',
@@ -75,7 +80,11 @@ $(document).ready(async function () {
       const data = await response.json();
       if (response.ok) {
         alert(`Order #${orderId} rejected!`);
-        loadOrders(); // Reload
+        // Trigger removal animation
+        $foodItem.addClass('removing');
+        $foodItem.on('transitionend', function() {
+          $(this).remove();
+        });
       } else {
         alert(data.error || 'Update failed');
       }
