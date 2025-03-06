@@ -32,25 +32,19 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
  * API Endpoints
  ******************************************/
 
-// POST /api/signup
-// This endpoint is used for restaurant signup.
-// Payload: { username, email, password, restaurant_name, phone, user_type }
-// For restaurants, user_type is always "restaurant".
+// POST /api/signup (for restaurants)
 app.post('/api/signup', async (req, res) => {
   try {
     const { username, email, password, restaurant_name, phone, user_type } = req.body;
 
-    // Check if a user with the same email exists
     const userCheck = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     if (userCheck.rows.length > 0) {
       return res.status(400).json({ error: 'User with this email already exists.' });
     }
 
-    // Hash the password
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Insert the new user into the database
     const insertQuery = `
       INSERT INTO users (user_type, username, email, password, restaurant_name, phone)
       VALUES ($1, $2, $3, $4, $5, $6)
@@ -71,9 +65,7 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
-// POST /api/login
-// This endpoint handles login for both government and restaurant users.
-// For government login, the payload contains only { email, password }.
+// POST /api/login (for both government and restaurant users)
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -81,13 +73,11 @@ app.post('/api/login', async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(401).json({ error: 'User not found' });
     }
-
     const user = result.rows[0];
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
       return res.status(401).json({ error: 'Invalid password' });
     }
-
     res.json({
       message: 'Login successful',
       user: {
@@ -106,7 +96,6 @@ app.post('/api/login', async (req, res) => {
 });
 
 // GET /api/restaurants
-// Returns a list of restaurants from the "restaurants" table.
 app.get('/api/restaurants', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM restaurants');
@@ -118,7 +107,6 @@ app.get('/api/restaurants', async (req, res) => {
 });
 
 // GET /api/foods
-// Returns a list of food items from the "foods" table.
 app.get('/api/foods', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM foods');
@@ -129,9 +117,7 @@ app.get('/api/foods', async (req, res) => {
   }
 });
 
-// POST /api/orders
-// Creates a new order.
-// Payload: { restaurant_username, donated_foods, amount, order_date, order_status }
+// POST /api/orders - create a new order
 app.post('/api/orders', async (req, res) => {
   try {
     const { restaurant_username, donated_foods, amount, order_date, order_status } = req.body;
@@ -154,8 +140,7 @@ app.post('/api/orders', async (req, res) => {
   }
 });
 
-// GET /api/orders
-// Retrieves the list of orders from the "orders" table.
+// GET /api/orders - retrieve all orders
 app.get('/api/orders', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM orders');
@@ -166,12 +151,7 @@ app.get('/api/orders', async (req, res) => {
   }
 });
 
-// GET /api/orders-with-distance
-// Joins orders with restaurants to retrieve distance & other fields
-// GET /api/orders-with-distance
-// Joins orders with restaurants to retrieve distance & other fields
-// GET /api/orders-with-distance
-// Joins orders with restaurants to retrieve distance & other fields
+// GET /api/orders-with-distance - join orders with restaurants (if needed)
 app.get('/api/orders-with-distance', async (req, res) => {
   try {
     const query = `
@@ -186,7 +166,6 @@ app.get('/api/orders-with-distance', async (req, res) => {
       FROM orders AS o
       JOIN restaurants AS r
       ON o.restaurant_username = r.restaurant_username
-
     `;
     const result = await pool.query(query);
     res.json(result.rows);
@@ -196,15 +175,11 @@ app.get('/api/orders-with-distance', async (req, res) => {
   }
 });
 
-
-
-// PUT /api/orders/:orderId
-// Update order_status to 'accepted' or 'rejected'
+// PUT /api/orders/:orderId - update order status
 app.put('/api/orders/:orderId', async (req, res) => {
   try {
     const { orderId } = req.params;
-    const { newStatus } = req.body; // 'accepted' or 'rejected'
-
+    const { newStatus } = req.body;
     const updateQuery = `
       UPDATE orders
       SET order_status = $1
@@ -215,7 +190,6 @@ app.put('/api/orders/:orderId', async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Order not found' });
     }
-
     res.json({ message: 'Order updated successfully', order: result.rows[0] });
   } catch (err) {
     console.error('Error in PUT /api/orders/:orderId:', err);

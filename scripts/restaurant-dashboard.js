@@ -1,64 +1,137 @@
-$(document).ready(async function () {
-  // Function to load previous orders from /api/orders
-  async function loadPreviousOrders() {
-    try {
-      const response = await fetch('/api/orders');
-      const orders = await response.json();
-      // Example: Filter orders for "A2B Restaurant"
-      const currentRestaurant = "A2B Restaurant";
-      const filteredOrders = orders.filter(order => order.restaurant_username === currentRestaurant);
-      $("#orders-list").empty();
-      filteredOrders.forEach(order => {
-        $("#orders-list").append(`
-          <div class="order-row">
-            <img src="../images/food.png" alt="Food Image">
-            <div>${order.donated_foods}</div>
-            <div>${order.amount}</div>
-            <div>${order.order_date}</div>
-          </div>
-        `);
-      });
-    } catch (err) {
-      console.error('Error loading orders:', err);
-    }
-  }
+$(document).ready(function () {
+  // Use the actual restaurant username from the header data attribute
+  const restaurantUsername = $("#header-title").data("username");
 
-  // Function to load foods from /api/foods for the dropdown
-  async function loadFoods() {
+  /************************************
+   * 1. Toggle the "Raise Order" form
+   ************************************/
+  $("#raise-order-btn").click(function() {
+    $("#order-container").removeClass("hidden").slideToggle(300);
+  });
+
+  /************************************
+   * 2. Toggle the hamburger dropdown
+   ************************************/
+  $(".hamburger").click(function(e) {
+    e.stopPropagation();
+    $(".hamburger-dropdown").removeClass("hidden").slideToggle(300);
+  });
+  $(document).click(function() {
+    $(".hamburger-dropdown").slideUp(300);
+  });
+  $(".hamburger-dropdown").click(function(e) {
+    e.stopPropagation();
+  });
+
+  /************************************
+   * 3. Toggle the "Select Food" dropdown
+   ************************************/
+  $("#food-items-dropdown-btn").click(function(e) {
+    e.stopPropagation();
+    $("#dropdown-menu").slideToggle(300);
+  });
+  $(document).click(function() {
+    $("#dropdown-menu").slideUp(300);
+  });
+  $("#dropdown-menu").click(function(e) {
+    e.stopPropagation();
+  });
+
+  /************************************
+   * 4. Load food items from /api/foods
+   ************************************/
+  async function loadFoodItems() {
     try {
       const response = await fetch('/api/foods');
       const foods = await response.json();
       const $foodList = $("#food-list");
       $foodList.empty();
       foods.forEach(food => {
-        // Assuming food.food_name is provided from your DB
-        $foodList.append(`<li>${food.food_name}</li>`);
+        $foodList.append(`<li class="dropdown-food-item">${food.food_name}</li>`);
       });
     } catch (err) {
-      console.error('Error loading foods:', err);
+      console.error('Error loading food items:', err);
+    }
+  }
+  loadFoodItems();
+
+  /************************************
+   * 5. Add selected food from dropdown
+   ************************************/
+  $("#food-list").on("click", ".dropdown-food-item", function () {
+    const selectedText = $(this).text().trim();
+    if ($("#selected-foods").find(`div:contains("${selectedText}")`).length === 0) {
+      $("#selected-foods").append(
+        `<div class="selected-food">${selectedText} <span class="remove-food">x</span></div>`
+      );
+    }
+  });
+  $("#selected-foods").on("click", ".remove-food", function () {
+    $(this).parent().remove();
+  });
+
+  /************************************
+   * 6. Load ONLY accepted orders
+   ************************************/
+  async function loadPreviousOrders() {
+    try {
+      const response = await fetch('/api/orders');
+      const orders = await response.json();
+      // Filter for accepted orders for this restaurant
+      const filteredOrders = orders.filter(order =>
+        order.restaurant_username === restaurantUsername &&
+        order.order_status === 'accepted'
+      );
+      $("#orders-list").empty();
+      if (filteredOrders.length === 0) {
+        $("#orders-list").append(`<div>No accepted orders found.</div>`);
+      } else {
+        filteredOrders.forEach(order => {
+          $("#orders-list").append(`
+            <div class="order-row" data-order-id="${order.order_id}">
+              <img src="../images/food.png" alt="Food Image">
+              <div>${order.donated_foods}</div>
+              <div>${order.amount}</div>
+              <div>${order.order_date}</div>
+            </div>
+          `);
+        });
+      }
+    } catch (err) {
+      console.error('Error loading previous orders:', err);
     }
   }
 
-  // Populate the food dropdown on page load
-  loadFoods();
+  /************************************
+   * 7. Toggle "Previous Orders" container
+   ************************************/
+  $("#previous-orders-btn").click(function () {
+    $("#previous-orders-container").slideToggle(600, function () {
+      if (!$(this).is(":hidden")) {
+        loadPreviousOrders();
+      }
+    });
+  });
 
-  // Event handler for submitting an order
+  /************************************
+   * 8. Submit a new order
+   ************************************/
   $("#submit-order-btn").click(async function () {
     const selectedFoods = [];
     $(".selected-food").each(function () {
-      selectedFoods.push($(this).contents().filter(function () {
-        return this.nodeType === 3;
-      }).text().trim());
+      const foodText = $(this).text().replace(" x", "").trim();
+      selectedFoods.push(foodText);
     });
-    const amount = $("#amount-input").val();
+    const amount = $("#amount-input").val().trim();
     if (selectedFoods.length === 0 || !amount) {
       alert("Please select at least one food item and enter the amount.");
       return;
     }
     const order_date = new Date().toISOString();
+    // New orders are initially pending
     const order_status = "pending";
-    // Hardcoded restaurant for example – in practice, retrieve from user session
-    const restaurant_username = "A2B Restaurant";
+    // Use the actual restaurant username (from data attribute)
+    const restaurant_username = restaurantUsername;
 
     try {
       const response = await fetch('/api/orders', {
@@ -75,7 +148,6 @@ $(document).ready(async function () {
       const data = await response.json();
       if (response.ok) {
         alert('Order submitted successfully! Order ID: ' + data.order_id);
-        loadPreviousOrders();
         $("#selected-foods").empty();
         $("#amount-input").val("");
       } else {
@@ -85,15 +157,4 @@ $(document).ready(async function () {
       console.error('Error creating order:', err);
     }
   });
-
-  // Toggle previous orders display
-  $("#previous-orders-btn").click(function () {
-    $("#previous-orders-container").slideToggle(600, function () {
-      if (!$(this).is(":hidden")) {
-        loadPreviousOrders();
-      }
-    });
-  });
-
-  // (Retain any additional UI interactions such as dropdown toggling as in your original code)
 });
