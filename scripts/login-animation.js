@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-  // Existing login button event listeners
+  // Attach event listeners to login and signup buttons
   const loginButtons = document.querySelectorAll('.button-login');
   loginButtons.forEach(btn => {
     btn.addEventListener('click', function(e) {
@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   });
 
-  // New signup button event listener
   const signupButtons = document.querySelectorAll('.button-signup');
   signupButtons.forEach(btn => {
     btn.addEventListener('click', function(e) {
@@ -21,13 +20,10 @@ function showLoginForm(clickedButton) {
   const topContainer = rightContainer.querySelector('.top');
   const bottomContainer = rightContainer.querySelector('.bottom');
 
-  let headerMessage = '';
-  if (clickedButton.closest('.top')) {
-    headerMessage = `<h2 class="login-form-header">For Government</h2>`;
-  } else if (clickedButton.closest('.bottom')) {
-    headerMessage = `<h2 class="login-form-header">Welcome Back !</h2>
-                     <p class="login-form-subheader">Its nice to see you again.</p>`;
-  }
+  let headerMessage = clickedButton.closest('.top') ?
+    `<h2 class="login-form-header">For Government</h2>` :
+    `<h2 class="login-form-header">Welcome Back!</h2>
+     <p class="login-form-subheader">It's nice to see you again.</p>`;
 
   if (topContainer) topContainer.classList.add('fade-out');
   if (bottomContainer) bottomContainer.classList.add('fade-out');
@@ -38,7 +34,6 @@ function showLoginForm(clickedButton) {
 
     const formContainer = document.createElement('div');
     formContainer.className = 'login-form-container';
-
     formContainer.innerHTML = `
       <button class="back-button" id="back-btn">Back</button>
       <div class="login-form">
@@ -56,22 +51,33 @@ function showLoginForm(clickedButton) {
     `;
     rightContainer.appendChild(formContainer);
 
-    const loginFinalBtn = document.getElementById('login-final-btn');
-    loginFinalBtn.addEventListener('click', function() {
+    document.getElementById('login-final-btn').addEventListener('click', async function() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      console.log('Logging in with', email, password);
-      // Further login processing logic…
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          console.log('Login successful', data);
+          // Redirect after successful login
+          window.location.href = 'restaurant-dashboard.html';
+        } else {
+          alert(data.error || 'Login failed');
+        }
+      } catch (err) {
+        console.error('Login error:', err);
+      }
     });
 
-    const backBtn = document.getElementById('back-btn');
-    backBtn.addEventListener('click', function() {
+    document.getElementById('back-btn').addEventListener('click', function() {
       const container = document.querySelector('.login-form-container');
       if (container) {
         container.classList.add('fade-out');
-        setTimeout(function() {
-          window.location.href = "index.html";
-        }, 200);
+        setTimeout(() => window.location.href = "index.html", 200);
       } else {
         window.location.href = "index.html";
       }
@@ -83,24 +89,19 @@ function showSignupForm(clickedButton) {
   const rightContainer = document.querySelector('.right');
   const topContainer = rightContainer.querySelector('.top');
   const bottomContainer = rightContainer.querySelector('.bottom');
-
-  // Fade out the original sections
   if (topContainer) topContainer.classList.add('fade-out');
   if (bottomContainer) bottomContainer.classList.add('fade-out');
 
-  // After fade-out, remove old sections and inject the signup form
   setTimeout(() => {
     if (topContainer) topContainer.remove();
     if (bottomContainer) bottomContainer.remove();
 
-    // Create a new container for the signup form
     const formContainer = document.createElement('div');
     formContainer.className = 'signup-form-container';
-
     formContainer.innerHTML = `
       <button class="back-button" id="back-btn">Back</button>
       <div class="signup-form">
-        <h2 class="signup-form-header">Join Us !</h2>
+        <h2 class="signup-form-header">Join Us!</h2>
         <div class="form-group animate-username">
           <label for="user-name">User Name:</label>
           <input type="text" id="user-name" name="user-name" placeholder="Enter your user name">
@@ -111,7 +112,8 @@ function showSignupForm(clickedButton) {
         </div>
         <div class="form-group animate-email">
           <label for="email">Email:</label>
-          <input type="email" id="email" name="email" placeholder="Enter your email or phone">
+          <input type="email" id="email" name="email" placeholder="Enter your email">
+        </div>
         <div class="form-group animate-phone">
           <label for="phone">Phone:</label>
           <input type="text" id="phone" name="phone" placeholder="Enter your phone">
@@ -125,26 +127,37 @@ function showSignupForm(clickedButton) {
     `;
     rightContainer.appendChild(formContainer);
 
-    // Signup button logic
-    const signupFinalBtn = document.getElementById('signup-final-btn');
-    signupFinalBtn.addEventListener('click', function() {
-      const userName = document.getElementById('user-name').value;
-      const restaurantName = document.getElementById('restaurant-name').value;
+    document.getElementById('signup-final-btn').addEventListener('click', async function() {
+      const username = document.getElementById('user-name').value;
+      const restaurant_name = document.getElementById('restaurant-name').value;
       const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
       const password = document.getElementById('password').value;
-      console.log('Signing up with', userName, restaurantName, email, password);
-      // Further signup processing logic…
+      // For signup, user_type is fixed to "restaurant"
+      const user_type = 'restaurant';
+      try {
+        const response = await fetch('/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, password, restaurant_name, phone, user_type })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          console.log('Signup successful', data);
+          window.location.href = 'restaurant-dashboard.html';
+        } else {
+          alert(data.error || 'Signup failed');
+        }
+      } catch (err) {
+        console.error('Signup error:', err);
+      }
     });
 
-    // Back button logic
-    const backBtn = document.getElementById('back-btn');
-    backBtn.addEventListener('click', function() {
+    document.getElementById('back-btn').addEventListener('click', function() {
       const container = document.querySelector('.signup-form-container');
       if (container) {
         container.classList.add('fade-out');
-        setTimeout(function() {
-          window.location.href = "index.html";
-        }, 200);
+        setTimeout(() => window.location.href = "index.html", 200);
       } else {
         window.location.href = "index.html";
       }

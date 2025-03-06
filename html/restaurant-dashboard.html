@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data:; img-src 'self' data:;">
+
+  <title>Geetham Sweets and Snacks</title>
+
+  <!-- jQuery for smooth animations -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../styles/restaurant-dashboard.css">
+  <link rel="icon" type="image/png" href="../images/icon.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Poppins:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-container">
+    <div class="header-content">
+      <img src="../images/logo.png" alt="Logo" class="logo" />
+      <!-- This H1 will update dynamically with the selected restaurant's name -->
+      <h1 id="header-title">Geetham Sweets and Snacks</h1>
+    </div>
+    <div class="hamburger">&#9776;</div>
+  </div>
+  
+  <!-- "Raise Order" Section -->
+  <div class="raise-order-line">
+    <button id="raise-order-btn" class="raise-order-btn">
+      <!-- Plus icon (image) -->
+      <img src="../images/plus.png" alt="Plus Icon" />
+      <span>Raise Order</span>
+    </button>
+  </div>
+  
+  <!-- Order Container (initially hidden) -->
+  <div id="order-container" class="order-container hidden">
+    <!-- Order Form Header -->
+    <div class="order-header">
+      <div class="col">Donate Food</div>
+      <div class="col">Amount (in kg)</div>
+      <div class="col">Action</div>
+    </div>
+    <!-- Order Form Row -->
+    <div class="order-form">
+      <!-- Donate Food Dropdown Column -->
+      <div class="donate-section">
+        <button id="food-items-dropdown-btn" class="dropdown-btn">Select Food</button>
+        <!-- Dropdown with search -->
+        <div id="dropdown-menu" class="dropdown-menu hidden">
+          <input type="text" id="food-search" placeholder="Search food..." />
+          <ul id="food-list"></ul>
+        </div>
+        <!-- Selected Foods (each with remove button) -->
+        <div id="selected-foods" class="selected-foods"></div>
+      </div>
+      <!-- Amount Column -->
+      <div class="amount-section">
+        <input type="text" id="amount-input" placeholder="Enter amount." />
+      </div>
+      <!-- Submit Column -->
+      <div class="submit-section">
+        <button id="submit-order-btn" class="submit-btn">Submit</button>
+      </div>
+    </div>
+  </div>
+  
+  <hr class="line">
+  
+  <!-- "Previous Orders" Section -->
+  <div class="previous-orders-line">
+    <button id="previous-orders-btn" class="previous-orders-btn">Previous Orders</button>
+  </div>
+
+  <!-- Previous Orders Container (initially hidden) -->
+  <div id="previous-orders-container" class="previous-orders-container hidden">
+    <!-- Table Header -->
+    <div class="orders-header">
+      <div class="column">Food Image</div>
+      <div class="column">Food Items Donated</div>
+      <div class="column">Amount Donated</div>
+      <div class="column">Date</div>
+    </div>
+    <!-- Orders will be dynamically appended here -->
+    <div id="orders-list" class="orders-list"></div>
+  </div>
+
+  <!-- Custom JS -->
+  <script src="../scripts/restaurant-dashboard.js"></script>
+</body>
+</html>

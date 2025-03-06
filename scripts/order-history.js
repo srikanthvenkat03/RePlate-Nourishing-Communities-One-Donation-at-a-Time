@@ -1,37 +1,33 @@
-$(document).ready(function () {
-    let orderHistory = [
-        { orderId: "403-3501747-4070742", date: "17 January 2025", foodName: "Vegetable Biryani, Poori, Dosa, Chapathi, Idli, Samosa, Idiyappam ", amountDonated: "10 kg" },
-        { orderId: "403-3501747-4070743", date: "18 January 2025", foodName: "Chapati", amountDonated: "15 kg" },
-        { orderId: "403-3501747-4070744", date: "19 January 2025", foodName: "Paneer Butter Masala", amountDonated: "5 kg" }
-    ];
-
-    function loadOrderHistory() {
+$(document).ready(async function () {
+    async function loadOrderHistory() {
+      try {
+        const response = await fetch('/api/orders');
+        const orders = await response.json();
         $("#order-history-list").empty();
-
-        // Add Column Headers
         $("#order-history-list").append(`
-            <div class="order-header">
-                <div>Order ID</div>
-                <div>Date</div>
-                <div>Food Name</div>
-                <div>Amount Donated</div>
-            </div>
+          <div class="order-header">
+            <div>Order ID</div>
+            <div>Date</div>
+            <div>Food Name</div>
+            <div>Amount Donated</div>
+          </div>
         `);
-
-        // Add Orders
-        orderHistory.forEach((order) => {
-            $("#order-history-list").append(`
-                <div class="order-container">
-                    <div class="order-content">
-                        <div class="order-id">${order.orderId}</div>
-                        <div class="order-date">${order.date}</div>
-                        <div class="food-name">${order.foodName}</div>
-                        <div class="amount-donated">${order.amountDonated}</div>
-                    </div>
-                </div>
-            `);
+        orders.forEach(order => {
+          $("#order-history-list").append(`
+            <div class="order-container">
+              <div class="order-content">
+                <div class="order-id">${order.order_id}</div>
+                <div class="order-date">${order.order_date}</div>
+                <div class="food-name">${order.donated_foods}</div>
+                <div class="amount-donated">${order.amount}</div>
+              </div>
+            </div>
+          `);
         });
+      } catch (err) {
+        console.error('Error loading order history:', err);
+      }
     }
-
     loadOrderHistory();
-});
+  });
+  
