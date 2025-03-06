@@ -1,39 +1,61 @@
+// Function to extract username and restaurant name from URL
+function getQueryParams() {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    username: params.get('username'),
+    name: params.get('name')
+  };
+}
+
 $(document).ready(function () {
-  // Use the actual restaurant username from the header data attribute
-  const restaurantUsername = $("#header-title").data("username");
+  const loggedInUser = getQueryParams();
+
+  // Validate login
+  if (!loggedInUser.username) {
+    alert("User details missing. Please login again.");
+    window.location.href = '/html/index.html';
+    return;
+  }
+
+  // Dynamically update header title and data attribute
+  $("#header-title")
+    .text(loggedInUser.name)
+    .attr("data-username", loggedInUser.username);
+
+  const restaurantUsername = loggedInUser.username;
 
   /************************************
-   * 1. Toggle the "Raise Order" form
+   * 1. Toggle "Raise Order" form
    ************************************/
-  $("#raise-order-btn").click(function() {
+  $("#raise-order-btn").click(function () {
     $("#order-container").removeClass("hidden").slideToggle(300);
   });
 
   /************************************
-   * 2. Toggle the hamburger dropdown
+   * 2. Toggle hamburger dropdown
    ************************************/
-  $(".hamburger").click(function(e) {
+  $(".hamburger").click(function (e) {
     e.stopPropagation();
     $(".hamburger-dropdown").removeClass("hidden").slideToggle(300);
   });
-  $(document).click(function() {
+  $(document).click(function () {
     $(".hamburger-dropdown").slideUp(300);
   });
-  $(".hamburger-dropdown").click(function(e) {
+  $(".hamburger-dropdown").click(function (e) {
     e.stopPropagation();
   });
 
   /************************************
-   * 3. Toggle the "Select Food" dropdown
+   * 3. Toggle "Select Food" dropdown
    ************************************/
-  $("#food-items-dropdown-btn").click(function(e) {
+  $("#food-items-dropdown-btn").click(function (e) {
     e.stopPropagation();
     $("#dropdown-menu").slideToggle(300);
   });
-  $(document).click(function() {
+  $(document).click(function () {
     $("#dropdown-menu").slideUp(300);
   });
-  $("#dropdown-menu").click(function(e) {
+  $("#dropdown-menu").click(function (e) {
     e.stopPropagation();
   });
 
@@ -66,23 +88,37 @@ $(document).ready(function () {
       );
     }
   });
+
   $("#selected-foods").on("click", ".remove-food", function () {
     $(this).parent().remove();
   });
 
   /************************************
-   * 6. Load ONLY accepted orders
+   * 6. Implement Search in Food Dropdown
+   ************************************/
+  $('#food-search').on('input', function () {
+    const searchText = $(this).val().toLowerCase();
+    $("#food-list li").each(function () {
+      const foodItem = $(this).text().toLowerCase();
+      $(this).toggle(foodItem.includes(searchText));
+    });
+  });
+
+  /************************************
+   * 7. Load previous orders for logged-in user
    ************************************/
   async function loadPreviousOrders() {
     try {
       const response = await fetch('/api/orders');
       const orders = await response.json();
-      // Filter for accepted orders for this restaurant
+
       const filteredOrders = orders.filter(order =>
         order.restaurant_username === restaurantUsername &&
         order.order_status === 'accepted'
       );
+
       $("#orders-list").empty();
+
       if (filteredOrders.length === 0) {
         $("#orders-list").append(`<div>No accepted orders found.</div>`);
       } else {
@@ -103,7 +139,7 @@ $(document).ready(function () {
   }
 
   /************************************
-   * 7. Toggle "Previous Orders" container
+   * 8. Toggle "Previous Orders" container
    ************************************/
   $("#previous-orders-btn").click(function () {
     $("#previous-orders-container").slideToggle(600, function () {
@@ -114,7 +150,7 @@ $(document).ready(function () {
   });
 
   /************************************
-   * 8. Submit a new order
+   * 9. Submit a new order
    ************************************/
   $("#submit-order-btn").click(async function () {
     const selectedFoods = [];
@@ -123,29 +159,30 @@ $(document).ready(function () {
       selectedFoods.push(foodText);
     });
     const amount = $("#amount-input").val().trim();
+
     if (selectedFoods.length === 0 || !amount) {
       alert("Please select at least one food item and enter the amount.");
       return;
     }
+
     const order_date = new Date().toISOString();
-    // New orders are initially pending
     const order_status = "pending";
-    // Use the actual restaurant username (from data attribute)
-    const restaurant_username = restaurantUsername;
 
     try {
       const response = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          restaurant_username,
+          restaurant_username: restaurantUsername,
           donated_foods: selectedFoods.join(", "),
           amount,
           order_date,
           order_status
         })
       });
+
       const data = await response.json();
+
       if (response.ok) {
         alert('Order submitted successfully! Order ID: ' + data.order_id);
         $("#selected-foods").empty();

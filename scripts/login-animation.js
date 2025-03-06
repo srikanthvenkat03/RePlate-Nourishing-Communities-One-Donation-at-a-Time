@@ -67,7 +67,7 @@ function showLoginForm(clickedButton) {
           if (data.user.user_type === 'government') {
             window.location.href = '/html/food-info.html';
           } else if (data.user.user_type === 'restaurant') {
-            window.location.href = '/html/restaurant-dashboard.html';
+            window.location.href = `/html/restaurant-dashboard.html?username=${encodeURIComponent(data.user.username)}&name=${encodeURIComponent(data.user.restaurant_name)}`;
           } else {
             // Fallback redirection if needed.
             window.location.href = '/html/index.html';
