@@ -63,8 +63,15 @@ function showLoginForm(clickedButton) {
         const data = await response.json();
         if (response.ok) {
           console.log('Login successful', data);
-          // Redirect after successful login
-          window.location.href = 'restaurant-dashboard.html';
+          // Redirect based on user_type:
+          if (data.user.user_type === 'government') {
+            window.location.href = '/html/food-info.html';
+          } else if (data.user.user_type === 'restaurant') {
+            window.location.href = '/html/restaurant-dashboard.html';
+          } else {
+            // Fallback redirection if needed.
+            window.location.href = '/html/index.html';
+          }
         } else {
           alert(data.error || 'Login failed');
         }
@@ -77,9 +84,9 @@ function showLoginForm(clickedButton) {
       const container = document.querySelector('.login-form-container');
       if (container) {
         container.classList.add('fade-out');
-        setTimeout(() => window.location.href = "index.html", 200);
+        setTimeout(() => window.location.href = "/html/index.html", 200);
       } else {
-        window.location.href = "index.html";
+        window.location.href = "/html/index.html";
       }
     });
   }, 200);
@@ -144,7 +151,8 @@ function showSignupForm(clickedButton) {
         const data = await response.json();
         if (response.ok) {
           console.log('Signup successful', data);
-          window.location.href = 'restaurant-dashboard.html';
+          // After signup, restaurant users go to their dashboard
+          window.location.href = '/html/restaurant-dashboard.html';
         } else {
           alert(data.error || 'Signup failed');
         }
@@ -157,9 +165,9 @@ function showSignupForm(clickedButton) {
       const container = document.querySelector('.signup-form-container');
       if (container) {
         container.classList.add('fade-out');
-        setTimeout(() => window.location.href = "index.html", 200);
+        setTimeout(() => window.location.href = "/html/index.html", 200);
       } else {
-        window.location.href = "index.html";
+        window.location.href = "/html/index.html";
       }
     });
   }, 200);

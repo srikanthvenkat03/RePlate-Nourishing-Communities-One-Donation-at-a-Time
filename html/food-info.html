@@ -4,14 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Food Dashboard</title>
+  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- CSS -->
   <link rel="stylesheet" href="../styles/food-info.css">
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="../images/icon.png">
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,700&family=Poppins:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
 </head>
 <body>
+
   <!-- Header Section with Logo and Title -->
   <div class="header-container">
     <div class="header-content">
@@ -41,9 +49,9 @@
     </div>
   </div>
 
-  <!-- Food List -->
+  <!-- Container for both the header row and data rows -->
   <div id="food-list">
-    <!-- Header Row -->
+    <!-- Header Row (static) -->
     <div class="food-header">
       <div>Restaurant Name</div>
       <div>Food Name</div>
@@ -51,9 +59,10 @@
       <div>Distance</div>
       <div>Accept</div>
     </div>
-    <!-- Food items will be dynamically added here -->
+    <!-- The dynamic rows will be appended below by food-info.js -->
   </div>
 
+  <!-- Custom JS -->
   <script src="../scripts/food-info.js"></script>
 </body>
 </html>

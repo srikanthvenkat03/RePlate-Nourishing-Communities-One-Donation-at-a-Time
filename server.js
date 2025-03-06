@@ -20,16 +20,13 @@ const pool = new Pool({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from specific folders
+/******************************************
+ * Serve Static Files
+ ******************************************/
 app.use('/html', express.static(path.join(__dirname, 'html')));
 app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
 app.use('/styles', express.static(path.join(__dirname, 'styles')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
-
-// Default route: serve index.html
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'html', 'index.html'));
-});
 
 /******************************************
  * API Endpoints
@@ -59,7 +56,14 @@ app.post('/api/signup', async (req, res) => {
       VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING user_id
     `;
-    const result = await pool.query(insertQuery, [user_type, username, email, hashedPassword, restaurant_name, phone]);
+    const result = await pool.query(insertQuery, [
+      user_type,
+      username,
+      email,
+      hashedPassword,
+      restaurant_name,
+      phone
+    ]);
     res.json({ message: 'Signup successful', user_id: result.rows[0].user_id });
   } catch (err) {
     console.error('Error in /api/signup:', err);
@@ -77,11 +81,13 @@ app.post('/api/login', async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(401).json({ error: 'User not found' });
     }
+
     const user = result.rows[0];
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
       return res.status(401).json({ error: 'Invalid password' });
     }
+
     res.json({
       message: 'Login successful',
       user: {
@@ -99,18 +105,6 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// GET /api/foods
-// Returns a list of food items from the "foods" table.
-app.get('/api/foods', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM foods');
-    res.json(result.rows);
-  } catch (err) {
-    console.error('Error in GET /api/foods:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
 // GET /api/restaurants
 // Returns a list of restaurants from the "restaurants" table.
 app.get('/api/restaurants', async (req, res) => {
@@ -123,9 +117,21 @@ app.get('/api/restaurants', async (req, res) => {
   }
 });
 
+// GET /api/foods
+// Returns a list of food items from the "foods" table.
+app.get('/api/foods', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM foods');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error in GET /api/foods:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // POST /api/orders
 // Creates a new order.
-// Expected payload: { restaurant_username, donated_foods, amount, order_date, order_status }
+// Payload: { restaurant_username, donated_foods, amount, order_date, order_status }
 app.post('/api/orders', async (req, res) => {
   try {
     const { restaurant_username, donated_foods, amount, order_date, order_status } = req.body;
@@ -134,7 +140,13 @@ app.post('/api/orders', async (req, res) => {
       VALUES ($1, $2, $3, $4, $5)
       RETURNING order_id
     `;
-    const result = await pool.query(insertOrderQuery, [restaurant_username, donated_foods, amount, order_date, order_status]);
+    const result = await pool.query(insertOrderQuery, [
+      restaurant_username,
+      donated_foods,
+      amount,
+      order_date,
+      order_status
+    ]);
     res.json({ message: 'Order created successfully', order_id: result.rows[0].order_id });
   } catch (err) {
     console.error('Error in /api/orders:', err);
@@ -152,6 +164,70 @@ app.get('/api/orders', async (req, res) => {
     console.error('Error in GET /api/orders:', err);
     res.status(500).json({ error: 'Server error' });
   }
+});
+
+// GET /api/orders-with-distance
+// Joins orders with restaurants to retrieve distance & other fields
+// GET /api/orders-with-distance
+// Joins orders with restaurants to retrieve distance & other fields
+// GET /api/orders-with-distance
+// Joins orders with restaurants to retrieve distance & other fields
+app.get('/api/orders-with-distance', async (req, res) => {
+  try {
+    const query = `
+      SELECT
+        o.order_id,
+        o.restaurant_username,
+        o.donated_foods,
+        o.amount,
+        o.order_status,
+        r.restaurant_name,
+        r.distance
+      FROM orders AS o
+      JOIN restaurants AS r
+      ON o.restaurant_username = r.restaurant_username
+
+    `;
+    const result = await pool.query(query);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error in GET /api/orders-with-distance:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
+
+// PUT /api/orders/:orderId
+// Update order_status to 'accepted' or 'rejected'
+app.put('/api/orders/:orderId', async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { newStatus } = req.body; // 'accepted' or 'rejected'
+
+    const updateQuery = `
+      UPDATE orders
+      SET order_status = $1
+      WHERE order_id = $2
+      RETURNING *
+    `;
+    const result = await pool.query(updateQuery, [newStatus, orderId]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    res.json({ message: 'Order updated successfully', order: result.rows[0] });
+  } catch (err) {
+    console.error('Error in PUT /api/orders/:orderId:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+/******************************************
+ * Default Route (Serve index.html)
+ ******************************************/
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html', 'index.html'));
 });
 
 app.listen(port, () => {
