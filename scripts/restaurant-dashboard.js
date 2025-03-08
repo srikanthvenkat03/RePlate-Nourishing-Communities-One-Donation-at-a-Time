@@ -45,6 +45,19 @@ $(document).ready(function () {
     e.stopPropagation();
   });
 
+  // New event listeners for hamburger dropdown options
+  $(".hamburger-dropdown .dropdown-option").on("click", function () {
+    const optionText = $(this).text().trim();
+    if (optionText === "Order History") {
+      window.location.href = "/html/order-history-restaurant.html?restaurant=" 
+        + encodeURIComponent(restaurantUsername)
+        + "&name=" + encodeURIComponent(loggedInUser.name);
+    }
+  });
+  $(".hamburger-dropdown .dropdown-option-logout").on("click", function () {
+    window.location.href = "/html/index.html";
+  });
+
   /************************************
    * 3. Toggle "Select Food" dropdown
    ************************************/

@@ -15,11 +15,14 @@ $(document).ready(async function () {
     $("#header-title").text(`Food Dashboard - ${loggedInUser.name}`);
   }
   
-  // Continue with your existing logic to load orders, etc.
+  // Load orders from the /api/orders endpoint
   async function loadOrders() {
     try {
-      const response = await fetch('/api/orders-with-distance');
-      const orders = await response.json();
+      const response = await fetch('/api/orders');
+      let orders = await response.json();
+
+      // Filter to show only pending orders
+      orders = orders.filter(order => order.order_status === 'pending');
 
       // Grab the header row (clone it) so we can preserve it after emptying
       const headerRow = $('.food-header').clone();
@@ -30,7 +33,7 @@ $(document).ready(async function () {
       // Re-append the header row
       $("#food-list").append(headerRow);
 
-      // Create a row for each order
+      // Create a row for each pending order
       orders.forEach(order => {
         $("#food-list").append(`
           <div class="food-item" data-order-id="${order.order_id}">
@@ -38,7 +41,7 @@ $(document).ready(async function () {
               <div class="restaurant-name">${order.restaurant_name}</div>
               <div class="food-name">${order.donated_foods}</div>
               <div class="weight">${order.amount}</div>
-              <div class="distance">${order.distance}</div>
+              <div class="distance">${order.distance || 'N/A'}</div>
               <div class="side-tick">
                 <button class="tick-btn accept-btn">
                   <img src="../images/tick-icon-vector-14450588-removebg-preview.png" alt="Accept">
@@ -58,7 +61,7 @@ $(document).ready(async function () {
     }
   }
 
-  // Accept/Reject Logic (unchanged)
+  // Accept order logic
   $("#food-list").on('click', '.accept-btn', async function() {
     const $foodItem = $(this).closest('.food-item');
     const orderId = $foodItem.data('order-id');
@@ -83,6 +86,7 @@ $(document).ready(async function () {
     }
   });
 
+  // Reject order logic
   $("#food-list").on('click', '.reject-btn', async function() {
     const $foodItem = $(this).closest('.food-item');
     const orderId = $foodItem.data('order-id');

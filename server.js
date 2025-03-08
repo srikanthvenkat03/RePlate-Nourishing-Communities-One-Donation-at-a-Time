@@ -34,24 +34,19 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 app.post('/api/signup', async (req, res) => {
   try {
     const { username, email, password, restaurant_name, phone, user_type } = req.body;
-
     const userCheck = await pool.query(
       'SELECT * FROM users WHERE email = $1 OR username = $2',
       [email, username]
     );
-
     if (userCheck.rows.length > 0) {
       return res.status(400).json({ error: 'User already exists.' });
     }
-
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const result = await pool.query(
       `INSERT INTO users (user_type, username, email, password, restaurant_name, phone)
        VALUES ($1, $2, $3, $4, $5, $6) RETURNING user_id`,
       [user_type, username, email, hashedPassword, restaurant_name, phone]
     );
-
     res.json({ message: 'Signup successful', user_id: result.rows[0].user_id });
   } catch (err) {
     console.error('Signup error:', err);
@@ -63,23 +58,18 @@ app.post('/api/signup', async (req, res) => {
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const result = await pool.query(
       'SELECT * FROM users WHERE email = $1 OR username = $1',
       [email]
     );
-
     if (result.rows.length === 0) {
       return res.status(401).json({ error: 'User not found' });
     }
-
     const user = result.rows[0];
     const isValid = await bcrypt.compare(password, user.password);
-
     if (!isValid) {
       return res.status(401).json({ error: 'Invalid password' });
     }
-
     res.json({
       message: 'Login successful',
       user: {
@@ -97,7 +87,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Retrieve orders along with Restaurant Names (JOIN Query)
+// GET /api/orders (JOIN with restaurants to include distance)
 app.get('/api/orders', async (req, res) => {
   try {
     const result = await pool.query(`
@@ -108,9 +98,11 @@ app.get('/api/orders', async (req, res) => {
         o.amount,
         o.order_status, 
         o.order_date,
-        r.restaurant_name
+        r.restaurant_name,
+        r.distance
       FROM orders o
-      JOIN restaurants r ON o.restaurant_username = r.restaurant_username
+      JOIN restaurants r 
+        ON o.restaurant_username = r.restaurant_username
     `);
     res.json(result.rows);
   } catch (err) {
@@ -119,10 +111,67 @@ app.get('/api/orders', async (req, res) => {
   }
 });
 
-// Get Restaurants
+// POST /api/orders
+app.post('/api/orders', async (req, res) => {
+  try {
+    const { restaurant_username, donated_foods, amount, order_date, order_status } = req.body;
+    const result = await pool.query(
+      `INSERT INTO orders (restaurant_username, donated_foods, amount, order_date, order_status)
+       VALUES ($1, $2, $3, $4, $5) RETURNING order_id`,
+      [restaurant_username, donated_foods, amount, order_date, order_status]
+    );
+    res.json({ order_id: result.rows[0].order_id });
+  } catch (err) {
+    console.error('Error creating order:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// PUT /api/orders/:orderId - update order status & update restaurant's amount_donated
+app.put('/api/orders/:orderId', async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { newStatus } = req.body;
+    const orderResult = await pool.query('SELECT * FROM orders WHERE order_id = $1', [orderId]);
+    if (orderResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+    const order = orderResult.rows[0];
+    await pool.query(
+      'UPDATE orders SET order_status = $1 WHERE order_id = $2',
+      [newStatus, orderId]
+    );
+    await pool.query(`
+      UPDATE restaurants
+         SET amount_donated = (
+           SELECT COALESCE(SUM(amount), 0)
+             FROM orders
+            WHERE restaurant_username = $1
+              AND order_status = 'accepted'
+         )
+       WHERE restaurant_username = $1
+    `, [order.restaurant_username]);
+    res.json({ message: `Order ${orderId} updated to ${newStatus}` });
+  } catch (err) {
+    console.error('Error updating order:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// GET /api/restaurants - return restaurant info including stored amount_donated
 app.get('/api/restaurants', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM restaurants');
+    const result = await pool.query(`
+      SELECT
+        restaurant_username,
+        restaurant_name,
+        address,
+        rating,
+        distance,
+        amount_donated
+      FROM restaurants
+      ORDER BY restaurant_username;
+    `);
     res.json(result.rows);
   } catch (err) {
     console.error('Error in GET /api/restaurants:', err);
@@ -130,64 +179,13 @@ app.get('/api/restaurants', async (req, res) => {
   }
 });
 
-// Get Foods
+// GET /api/foods
 app.get('/api/foods', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM foods');
     res.json(result.rows);
   } catch (err) {
     console.error('GET /api/foods error:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// Get user by username
-app.get('/api/users/:username', async (req, res) => {
-  try {
-    const { username } = req.params;
-    const userResult = await pool.query(
-      'SELECT * FROM users WHERE username = $1',
-      [username]
-    );
-    if (userResult.rows.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    res.json(userResult.rows[0]);
-  } catch (err) {
-    console.error('GET /api/users/:username error:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-/******************************************
- * New Rating Endpoint
- ******************************************/
-app.put('/api/restaurants/:restaurantUsername/rating', async (req, res) => {
-  try {
-    const { restaurantUsername } = req.params;
-    const { rating } = req.body;
-
-    // Validate rating in [1..5]
-    if (typeof rating !== 'number' || rating < 1 || rating > 5) {
-      return res.status(400).json({ error: 'Invalid rating value. Must be 1..5.' });
-    }
-
-    // Update the rating in the restaurants table
-    const updateResult = await pool.query(
-      'UPDATE restaurants SET rating = $1 WHERE restaurant_username = $2 RETURNING *',
-      [rating, restaurantUsername]
-    );
-
-    if (updateResult.rowCount === 0) {
-      return res.status(404).json({ error: 'Restaurant not found' });
-    }
-
-    res.json({
-      message: 'Rating updated',
-      restaurant: updateResult.rows[0]
-    });
-  } catch (err) {
-    console.error('Error updating rating:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });
