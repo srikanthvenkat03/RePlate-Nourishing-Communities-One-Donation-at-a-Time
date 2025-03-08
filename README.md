@@ -1,4 +1,6 @@
 RePlate
+
+
 RePlate is a web-based platform that helps restaurants donate surplus food and manage orders. The system supports two user types—restaurant and government—allowing restaurants to raise food donation orders and government users to review and accept orders. The project is built with Node.js, Express, PostgreSQL, and uses jQuery on the front end.
 Features
 •	User Signup & Login: Secure user registration and login with password hashing using bcrypt.
