@@ -63,13 +63,17 @@ function showLoginForm(clickedButton) {
         const data = await response.json();
         if (response.ok) {
           console.log('Login successful', data);
-          // Redirect based on user_type:
+          // Redirect based on user_type
           if (data.user.user_type === 'government') {
-            window.location.href = '/html/food-info.html';
+            // Government user -> restaurant-info.html
+            // Use restaurant_name or fallback to username if needed
+            const displayName = data.user.restaurant_name || data.user.username;
+            window.location.href = `/html/restaurant-info.html?username=${encodeURIComponent(data.user.username)}&name=${encodeURIComponent(displayName)}`;
           } else if (data.user.user_type === 'restaurant') {
+            // Restaurant user -> restaurant-dashboard.html
             window.location.href = `/html/restaurant-dashboard.html?username=${encodeURIComponent(data.user.username)}&name=${encodeURIComponent(data.user.restaurant_name)}`;
           } else {
-            // Fallback redirection if needed.
+            // Fallback
             window.location.href = '/html/index.html';
           }
         } else {
@@ -101,7 +105,7 @@ function showSignupForm(clickedButton) {
 
   setTimeout(() => {
     if (topContainer) topContainer.remove();
-    if (bottomContainer) bottomContainer.remove();
+    if (bottomContainer) topContainer.remove();
 
     const formContainer = document.createElement('div');
     formContainer.className = 'signup-form-container';
@@ -151,7 +155,6 @@ function showSignupForm(clickedButton) {
         const data = await response.json();
         if (response.ok) {
           console.log('Signup successful', data);
-          // After signup, restaurant users go to their dashboard
           window.location.href = '/html/restaurant-dashboard.html';
         } else {
           alert(data.error || 'Signup failed');

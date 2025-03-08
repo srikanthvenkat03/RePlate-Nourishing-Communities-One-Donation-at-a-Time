@@ -1,5 +1,21 @@
+// Extract query parameters for username and name
+function getQueryParams() {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    username: params.get('username'),
+    name: params.get('name')
+  };
+}
+
 $(document).ready(async function () {
-  // 1) Load the orders from /api/orders-with-distance
+  const loggedInUser = getQueryParams();
+  
+  // If a name is provided in the URL, update the header to include the user's name
+  if (loggedInUser.name) {
+    $("#header-title").text(`Food Dashboard - ${loggedInUser.name}`);
+  }
+  
+  // Continue with your existing logic to load orders, etc.
   async function loadOrders() {
     try {
       const response = await fetch('/api/orders-with-distance');
@@ -14,7 +30,7 @@ $(document).ready(async function () {
       // Re-append the header row
       $("#food-list").append(headerRow);
 
-      // 2) For each order, create a row
+      // Create a row for each order
       orders.forEach(order => {
         $("#food-list").append(`
           <div class="food-item" data-order-id="${order.order_id}">
@@ -42,7 +58,7 @@ $(document).ready(async function () {
     }
   }
 
-  // 3) Accept/Reject Logic (Event Delegation)
+  // Accept/Reject Logic (unchanged)
   $("#food-list").on('click', '.accept-btn', async function() {
     const $foodItem = $(this).closest('.food-item');
     const orderId = $foodItem.data('order-id');
@@ -55,7 +71,6 @@ $(document).ready(async function () {
       const data = await response.json();
       if (response.ok) {
         alert(`Order #${orderId} accepted!`);
-        // Add class to trigger removal animation
         $foodItem.addClass('removing');
         $foodItem.on('transitionend', function() {
           $(this).remove();
@@ -80,7 +95,6 @@ $(document).ready(async function () {
       const data = await response.json();
       if (response.ok) {
         alert(`Order #${orderId} rejected!`);
-        // Trigger removal animation
         $foodItem.addClass('removing');
         $foodItem.on('transitionend', function() {
           $(this).remove();
@@ -93,10 +107,10 @@ $(document).ready(async function () {
     }
   });
 
-  // 4) On page load, call loadOrders
+  // On page load, call loadOrders
   loadOrders();
 
-  // Additional UI logic (dropdown toggles, etc.)
+  // UI logic for dropdown toggles remains unchanged
   $('.sort-by-btn').click(function(e) {
     e.stopPropagation();
     $('.sort-dropdown').slideToggle(300);
@@ -114,5 +128,19 @@ $(document).ready(async function () {
   $(document).click(function() {
     $('.sort-dropdown').slideUp(300);
     $('.hamburger-dropdown').slideUp(300);
+  });
+  
+  // Hamburger dropdown navigation event handlers
+  $(".hamburger-dropdown .dropdown-option").on("click", function () {
+    const optionText = $(this).text().trim();
+    if (optionText === "Restaurant Dashboard") {
+      window.location.href = "/html/restaurant-info.html";
+    } else if (optionText === "Order History") {
+      window.location.href = "/html/order-history.html";
+    }
+  });
+  
+  $(".hamburger-dropdown .dropdown-option-logout").on("click", function () {
+    window.location.href = "/html/index.html";
   });
 });

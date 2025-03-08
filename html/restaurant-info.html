@@ -1,39 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurant Dashboard</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="../styles/restaurant-info.css">
-    <link rel="icon" type="image/png" href="../images/icon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Restaurant Dashboard</title>
+  <link rel="icon" type="image/png" href="../images/icon.png">
+  <link rel="stylesheet" href="../styles/restaurant-info.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
-    <!-- Header Section with Logo and Hamburger -->
-    <div class="header-container">
-        <div class="header-content">
-            <img src="../images/logo.png" alt="Logo" class="logo"> <!-- Change path if needed -->
-            <h1>Restaurant Dashboard</h1>
-        </div>
-        <div class="hamburger">&#9776;</div> <!-- Positioned properly -->
+  <!-- Header Section -->
+  <div class="header-container">
+    <div class="header-content">
+      <img src="../images/logo.png" alt="Logo" class="logo">
+      <h1 id="header-title" data-username="">Restaurant Dashboard</h1>
     </div>
-
-    <!-- Search Bar -->
-    <div class="top-bar">
-        <input type="text" id="search" placeholder="Search" class="search-bar">
+    <!-- Hamburger Icon -->
+    <div class="hamburger">&#9776;</div>
+    <!-- Hamburger Dropdown (hidden by default) -->
+    <div class="hamburger-dropdown hidden">
+      <div class="dropdown-option">Food Dashboard</div>
+      <div class="dropdown-option">Order History</div>
+      <div class="dropdown-option-logout">Log Out</div>
     </div>
+  </div>
 
-    <!-- Restaurant List -->
-    <div id="restaurant-list">
-        <!-- Restaurants will be dynamically added here -->
-    </div>
+  <!-- Search Bar -->
+  <div class="top-bar">
+    <input type="text" id="search" placeholder="Search Restaurants" class="search-bar">
+  </div>
 
-    <script src="../scripts/restaurant-info.js"></script>
+  <!-- Main Container for Restaurants -->
+  <div id="restaurant-info-list" class="restaurant-container"></div>
 
+  <script src="../scripts/restaurant-info.js"></script>
 </body>
 </html>

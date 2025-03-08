@@ -1,19 +1,24 @@
-/* Reset & General Styles */
-* {
+/* Utility Classes */
+.hidden {
+    display: none;
+  }
+  
+  /* Reset & General Styles */
+  * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
+  }
+  
+  body {
     font-family: 'Poppins', sans-serif;
     background-color: #f8f8f8;
     margin: 0;
     padding: 0;
-}
-
-/* Header Section */
-.header-container {
+  }
+  
+  /* Header Section */
+  .header-container {
     background-color: #f57a28;
     width: 100%;
     padding: 10px 20px;
@@ -25,31 +30,30 @@ body {
     top: 0;
     left: 0;
     z-index: 1000;
-}
-
-/* Header Content */
-.header-content {
+  }
+  
+  /* Header Content */
+  .header-content {
     display: flex;
     align-items: center;
     gap: 10px;
-}
-
-.logo {
+  }
+  
+  .logo {
     width: 80px;
     height: 80px;
-}
-
-h1 {
+  }
+  
+  h1 {
     margin: 0;
     font-size: 50px;
     color: white;
-    font-family: "Lato","serif";
+    font-family: "Lato", "serif";
     font-weight: 700;
-    
   }
-
-/* Hamburger Menu */
-.hamburger {
+  
+  /* Hamburger Menu */
+  .hamburger {
     position: absolute;
     right: 40px;
     color: white;
@@ -62,23 +66,59 @@ h1 {
     align-items: center;
     border-radius: 50%;
     transition: background-color 0.3s ease-in-out;
-}
-
-.hamburger:hover {
+  }
+  
+  .hamburger:hover {
     background-color: rgba(255, 255, 255, 0.2);
-}
-
-/* Search Bar */
-.top-bar {
+  }
+  
+  /* Hamburger Dropdown */
+  .hamburger-dropdown {
+    position: absolute;
+    top: 70px; /* Adjust as needed */
+    right: 40px;
+    width: 220px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 2000;
+  }
+  
+  .hamburger-dropdown .dropdown-option,
+  .hamburger-dropdown .dropdown-option-logout {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+  }
+  
+  .hamburger-dropdown .dropdown-option:last-child {
+    border-bottom: none;
+  }
+  
+  .hamburger-dropdown .dropdown-option-logout {
+    color: rgb(241, 50, 50);
+  }
+  
+  .hamburger-dropdown .dropdown-option:hover,
+  .hamburger-dropdown .dropdown-option-logout:hover {
+    background-color: #e4e0e0;
+    color: black;
+  }
+  
+  /* Search Bar */
+  .top-bar {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     padding: 10px 0;
     margin-top: 120px;
-}
-
-.search-bar {
+  }
+  
+  .search-bar {
     width: 60%;
     padding: 10px;
     font-size: 16px;
@@ -86,22 +126,22 @@ h1 {
     border-radius: 50px;
     background-color: white;
     text-indent: 20px;
-}
-
-/* Order History Container */
-.order-history-container {
-    width: 80%;
+  }
+  
+  /* Order History Container */
+  .order-history-container {
+    width: 90%;
     margin: 20px auto;
     background-color: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-}
-
-/* Table Header */
-.order-header {
+  }
+  
+  /* Table Header */
+  .order-header {
     display: grid;
-    grid-template-columns: 20% 30% 30% 20%;
+    grid-template-columns: 10% 20% 30% 10% 20% 20%;
     background-color: #4CAF50;
     color: white;
     padding: 10px;
@@ -109,70 +149,68 @@ h1 {
     border-radius: 10px 10px 0 0;
     text-align: center;
     font-size: 20px;
-}
-
-
-.order-header div:nth-child(2) {
-    text-align: center;
-    padding-left: 0px;; /* Adjust spacing inside */
-    margin-left: -90px; /* Adds extra margin */
-}
-.order-header div:nth-child(3) {
+  }
+  
+  .order-header div:nth-child(3) {
     text-align: left;
-
-}
-.order-header div:nth-child(4) {
-    text-align: center;
-}
-/* Individual Order Entries */
-.order-container {
+  }
+  
+  .order-header div:nth-child(6) {
+    text-align: left;
+  }
+  
+  /* Individual Order Entries */
+  .order-container {
     border-bottom: 1px solid #ddd;
-}
-
-.order-content {
+  }
+  
+  .order-content {
     display: grid;
-    grid-template-columns: 20% 30% 30% 20%;
+    grid-template-columns: 10% 20% 30% 10% 20% 20%;
     padding: 12px;
     align-items: center;
     text-align: left;
-}
-
-.order-content:nth-child(even) {
-    background-color: #f9f9f9;
-}
-.order-content div:first-child {
-    text-align: left;
-    padding-left: 53px; /* Adjust spacing inside */
-    margin-left: 10px; /* Adds extra margin */
   }
+  
+  .order-content:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .order-content div:first-child {
+    text-align: left;
+    padding-left: 53px;
+    margin-left: 10px;
+  }
+  
   .order-content div:nth-child(2) {
     text-align: left;
-    padding-left: 73px; /* Adjust spacing inside */
-    margin-left: 38px; /* Adds extra margin */
+    padding-left: 73px;
+    margin-left: 38px;
   }
+  
   .order-content div:nth-child(3) {
     text-align: left;
-     /* Adds extra margin */
   }
+  
   .order-content div:nth-child(4) {
     text-align: center;
-    padding-left: 0px; /* Adjust spacing inside */
-    margin-left: 0px; /* Adds extra margin */
   }
+  
   .order-content div:nth-child(5) {
     text-align: left;
-    padding-left: 100px; /* Adjust spacing inside */
-    margin-left: 10px; /* Adds extra margin */
+    padding-left: 100px;
+    margin-left: 10px;
   }
-
-.order-content:hover {
+  
+  .order-content:hover {
     background-color: #f1f1f1;
     cursor: pointer;
-}
-
-/* Order Text */
-.order-id, .order-date, .food-name, .amount-donated {
+  }
+  
+  /* Order Text */
+  .order-id, .order-date, .food-name, .amount-donated {
     text-align: left;
     font-size: 1rem;
     color: #333;
-}
+  }
+  
