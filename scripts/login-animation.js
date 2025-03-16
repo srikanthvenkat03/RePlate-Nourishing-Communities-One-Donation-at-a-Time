@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-  // Attach event listeners to login and signup buttons
+
   const loginButtons = document.querySelectorAll('.button-login');
   loginButtons.forEach(btn => {
     btn.addEventListener('click', function(e) {
@@ -63,17 +63,12 @@ function showLoginForm(clickedButton) {
         const data = await response.json();
         if (response.ok) {
           console.log('Login successful', data);
-          // Redirect based on user_type
           if (data.user.user_type === 'government') {
-            // Government user -> restaurant-info.html
-            // Use restaurant_name or fallback to username if needed
             const displayName = data.user.restaurant_name || data.user.username;
             window.location.href = `/html/restaurant-info.html?username=${encodeURIComponent(data.user.username)}&name=${encodeURIComponent(displayName)}`;
           } else if (data.user.user_type === 'restaurant') {
-            // Restaurant user -> restaurant-dashboard.html
             window.location.href = `/html/restaurant-dashboard.html?username=${encodeURIComponent(data.user.username)}&name=${encodeURIComponent(data.user.restaurant_name)}`;
           } else {
-            // Fallback
             window.location.href = '/html/index.html';
           }
         } else {
@@ -144,7 +139,6 @@ function showSignupForm(clickedButton) {
       const email = document.getElementById('email').value;
       const phone = document.getElementById('phone').value;
       const password = document.getElementById('password').value;
-      // For signup, user_type is fixed to "restaurant"
       const user_type = 'restaurant';
       try {
         const response = await fetch('/api/signup', {

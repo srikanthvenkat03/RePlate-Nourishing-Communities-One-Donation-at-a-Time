@@ -7,7 +7,6 @@ const bcrypt = require('bcrypt');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// PostgreSQL setup
 const pool = new Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -16,21 +15,14 @@ const pool = new Pool({
   database: process.env.DB_NAME
 });
 
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Static Files
 app.use('/html', express.static(path.join(__dirname, 'html')));
 app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
 app.use('/styles', express.static(path.join(__dirname, 'styles')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-/******************************************
- * API Endpoints
- ******************************************/
-
-// Signup endpoint
 app.post('/api/signup', async (req, res) => {
   try {
     const { username, email, password, restaurant_name, phone, user_type } = req.body;
@@ -54,7 +46,6 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
-// Login endpoint (with email OR username)
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -87,7 +78,6 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// GET /api/orders (JOIN with restaurants to include distance)
 app.get('/api/orders', async (req, res) => {
   try {
     const result = await pool.query(`
@@ -111,7 +101,6 @@ app.get('/api/orders', async (req, res) => {
   }
 });
 
-// POST /api/orders
 app.post('/api/orders', async (req, res) => {
   try {
     const { restaurant_username, donated_foods, amount, order_date, order_status } = req.body;
@@ -127,7 +116,6 @@ app.post('/api/orders', async (req, res) => {
   }
 });
 
-// PUT /api/orders/:orderId - update order status & update restaurant's amount_donated
 app.put('/api/orders/:orderId', async (req, res) => {
   try {
     const { orderId } = req.params;
@@ -158,7 +146,6 @@ app.put('/api/orders/:orderId', async (req, res) => {
   }
 });
 
-// GET /api/restaurants - return restaurant info including stored amount_donated
 app.get('/api/restaurants', async (req, res) => {
   try {
     const result = await pool.query(`
@@ -179,7 +166,25 @@ app.get('/api/restaurants', async (req, res) => {
   }
 });
 
-// GET /api/foods
+app.put('/api/restaurants/:restaurant_username/rating', async (req, res) => {
+  try {
+    const { restaurant_username } = req.params;
+    const { rating } = req.body;
+    
+    // Assuming that your restaurants table has a column for rating,
+    // you might update the rating directly:
+    await pool.query(
+      'UPDATE restaurants SET rating = $1 WHERE restaurant_username = $2',
+      [rating, restaurant_username]
+    );
+    
+    res.json({ message: 'Rating updated successfully' });
+  } catch (err) {
+    console.error('Error updating rating:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 app.get('/api/foods', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM foods');
@@ -190,12 +195,10 @@ app.get('/api/foods', async (req, res) => {
   }
 });
 
-// Default route
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'html', 'index.html'));
 });
 
-// Start server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
