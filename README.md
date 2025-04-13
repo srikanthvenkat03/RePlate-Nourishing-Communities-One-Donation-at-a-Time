@@ -1,4 +1,4 @@
-#**🍽️ RePlate – Rescue Surplus, Reconnect Communities
+# **🍽️ RePlate – Rescue Surplus, Reconnect Communities
 RePlate is a web-based platform that helps restaurants donate surplus food and empowers governments to manage and track food donations. Built with Node.js, Express, PostgreSQL, and jQuery on the front end.**
 
 🔑 **Features**
