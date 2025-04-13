@@ -11,7 +11,7 @@ Raise food donation orders, view accepted orders, and manage food items.
 🏛️ **Government Dashboard**
 View pending orders and accept/reject them.
 
-*📜 **Order History**
+📜 **Order History**
 
 **Restaurants:** See accepted donation history.
 
