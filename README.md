@@ -1,21 +1,21 @@
 # 🍽️ RePlate – Rescue Surplus, Reconnect Communities
 RePlate is a web-based platform that helps restaurants donate surplus food and empowers governments to manage and track food donations. Built with Node.js, Express, PostgreSQL, and jQuery on the front end.**
 
-## 🔑 **Features**
+### 🔑 **Features**
 🔐 User Signup & Login
 Secure login with password hashing using bcrypt.
 
-🏪 **Restaurant Dashboard**
+### 🏪 **Restaurant Dashboard**
 Raise food donation orders, view accepted orders, and manage food items.
 
-🏛️ **Government Dashboard**
+### 🏛️ **Government Dashboard**
 View pending orders and accept/reject them.
 
-📜 **Order History**
+### 📜 **Order History**
 
-**Restaurants:** See accepted donation history.
+#### **Restaurants:** See accepted donation history.
 
-**Government:** Track all donations.
+#### **Government:** Track all donations.
 
 🔄 **Dynamic Aggregation**
 The amount_donated column in the restaurants table updates automatically when an order status changes!
