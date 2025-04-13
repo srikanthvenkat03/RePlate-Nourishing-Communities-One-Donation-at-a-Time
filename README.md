@@ -20,7 +20,7 @@ View pending orders and accept/reject them.
 #### 🔄 **Dynamic Aggregation**
 The amount_donated column in the restaurants table updates automatically when an order status changes!
 
-####🗂️ **Project Structure**
+#### 🗂️ **Project Structure**
 
 bash
 Copy
